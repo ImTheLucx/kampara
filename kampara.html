@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kampara — Tu bolsa renace de la tierra</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+/* ── RESET & BASE ───────────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --dark:    #0e1e0e;
+  --forest:  #1a2e1a;
+  --mid:     #2e5a2e;
+  --bright:  #4caf50;
+  --light:   #81c784;
+  --pale:    #e8f5e9;
+  --cream:   #f5f0e8;
+  --brown:   #8d6e63;
+  --white:   #fafaf7;
+  --text:    #1a1a14;
+}
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--cream);
+  color: var(--text);
+  overflow-x: hidden;
+  cursor: none;
+}
+
+/* ── CURSOR ─────────────────────────────────────────────────── */
+.cursor {
+  position: fixed;
+  width: 12px; height: 12px;
+  background: var(--bright);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s ease, background 0.2s;
+  transform: translate(-50%, -50%);
+}
+.cursor-ring {
+  position: fixed;
+  width: 36px; height: 36px;
+  border: 1.5px solid var(--bright);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  opacity: 0.5;
+  transition: transform 0.4s ease, width 0.3s, height 0.3s, opacity 0.3s;
+  transform: translate(-50%, -50%);
+}
+body:has(a:hover) .cursor { transform: translate(-50%,-50%) scale(2.5); background: var(--light); }
+body:has(a:hover) .cursor-ring { opacity: 0; }
+
+/* ── NAV ─────────────────────────────────────────────────────── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0;
+  z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.2rem 3rem;
+  mix-blend-mode: normal;
+  transition: background 0.4s, padding 0.4s;
+}
+nav.scrolled {
+  background: rgba(14,30,14,0.92);
+  backdrop-filter: blur(12px);
+  padding: 0.8rem 3rem;
+}
+.nav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: var(--bright);
+  letter-spacing: 0.05em;
+  text-decoration: none;
+}
+.nav-links { display: flex; gap: 2.5rem; list-style: none; }
+.nav-links a {
+  color: var(--pale);
+  text-decoration: none;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  opacity: 0.7;
+  transition: opacity 0.2s, color 0.2s;
+}
+.nav-links a:hover { opacity: 1; color: var(--bright); }
+.nav-cta {
+  background: var(--bright);
+  color: var(--dark) !important;
+  opacity: 1 !important;
+  padding: 0.5rem 1.2rem;
+  border-radius: 99px;
+  font-weight: 500 !important;
+  transition: background 0.2s, transform 0.2s !important;
+}
+.nav-cta:hover { background: var(--light) !important; transform: scale(1.04); }
+
+/* ── HERO ─────────────────────────────────────────────────────── */
+.hero {
+  min-height: 100vh;
+  background: var(--forest);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  align-items: center;
+  padding: 8rem 3rem 4rem;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -200px; right: -200px;
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(76,175,80,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -100px; left: -100px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(76,175,80,0.08) 0%, transparent 70%);
+  pointer-events: none;
+}
+.hero-text { position: relative; z-index: 2; }
+.hero-eyebrow {
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--bright);
+  margin-bottom: 1.5rem;
+  display: flex; align-items: center; gap: 0.8rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.2s forwards;
+}
+.hero-eyebrow::before {
+  content: '';
+  display: block;
+  width: 28px; height: 1px;
+  background: var(--bright);
+}
+.hero-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(3rem, 6vw, 5.5rem);
+  font-weight: 900;
+  line-height: 1.05;
+  color: var(--white);
+  margin-bottom: 0.3rem;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.4s forwards;
+}
+.hero-title em {
+  font-style: italic;
+  color: var(--bright);
+  display: block;
+}
+.hero-subtitle {
+  font-size: 1rem;
+  color: rgba(232,245,233,0.65);
+  margin: 1.5rem 0 2.5rem;
+  max-width: 440px;
+  line-height: 1.7;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.6s forwards;
+}
+.hero-actions {
+  display: flex; gap: 1rem; flex-wrap: wrap;
+  opacity: 0;
+  animation: fadeUp 0.8s 0.8s forwards;
+}
+.btn-primary {
+  background: var(--bright);
+  color: var(--dark);
+  padding: 0.85rem 2rem;
+  border-radius: 99px;
+  font-weight: 500;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+.btn-primary:hover {
+  background: var(--light);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(76,175,80,0.3);
+}
+.btn-ghost {
+  border: 1px solid rgba(255,255,255,0.2);
+  color: var(--pale);
+  padding: 0.85rem 2rem;
+  border-radius: 99px;
+  font-size: 0.9rem;
+  text-decoration: none;
+  transition: border-color 0.2s, color 0.2s, transform 0.2s;
+  display: inline-flex; align-items: center; gap: 0.5rem;
+}
+.btn-ghost:hover {
+  border-color: var(--bright);
+  color: var(--bright);
+  transform: translateY(-2px);
+}
+
+/* Hero visual */
+.hero-visual {
+  display: flex; align-items: center; justify-content: center;
+  position: relative; z-index: 2;
+  opacity: 0;
+  animation: fadeIn 1.2s 0.6s forwards;
+}
+.bag-wrapper {
+  position: relative;
+  width: 280px; height: 320px;
+}
+.bag-glow {
+  position: absolute;
+  inset: -40px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(76,175,80,0.2) 0%, transparent 70%);
+  animation: pulse 3s ease-in-out infinite;
+}
+@keyframes pulse { 0%,100%{opacity:0.6;transform:scale(1)} 50%{opacity:1;transform:scale(1.08)} }
+
+/* Floating particles */
+.particle {
+  position: absolute;
+  border-radius: 50%;
+  background: var(--bright);
+  opacity: 0.4;
+  animation: float linear infinite;
+}
+@keyframes float {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 0; }
+  10%  { opacity: 0.4; }
+  90%  { opacity: 0.2; }
+  100% { transform: translateY(-400px) rotate(360deg); opacity: 0; }
+}
+.hero-scroll {
+  position: absolute;
+  bottom: 2.5rem; left: 50%;
+  transform: translateX(-50%);
+  display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
+  color: rgba(255,255,255,0.4);
+  font-size: 0.7rem;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  animation: fadeIn 1s 1.5s both;
+}
+.scroll-line {
+  width: 1px; height: 40px;
+  background: linear-gradient(to bottom, var(--bright), transparent);
+  animation: scrollAnim 1.8s ease-in-out infinite;
+}
+@keyframes scrollAnim { 0%{transform:scaleY(0);transform-origin:top} 50%{transform:scaleY(1);transform-origin:top} 51%{transform-origin:bottom} 100%{transform:scaleY(0);transform-origin:bottom} }
+
+/* ── STATS STRIP ─────────────────────────────────────────────── */
+.stats-strip {
+  background: var(--dark);
+  padding: 2rem 3rem;
+  display: flex; justify-content: center; gap: 4rem;
+  flex-wrap: wrap;
+}
+.stat {
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity 0.6s, transform 0.6s;
+}
+.stat.visible { opacity: 1; transform: translateY(0); }
+.stat-number {
+  font-family: 'Playfair Display', serif;
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--bright);
+  line-height: 1;
+  margin-bottom: 0.3rem;
+}
+.stat-label {
+  font-size: 0.75rem;
+  color: rgba(232,245,233,0.5);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+/* ── SECTIONS COMMON ─────────────────────────────────────────── */
+section { padding: 6rem 3rem; }
+.section-tag {
+  font-size: 0.7rem;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--mid);
+  margin-bottom: 0.8rem;
+  display: flex; align-items: center; gap: 0.6rem;
+}
+.section-tag::before {
+  content: '';
+  width: 20px; height: 1px;
+  background: var(--bright);
+}
+.section-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(2rem, 4vw, 3.2rem);
+  font-weight: 900;
+  line-height: 1.1;
+  margin-bottom: 1rem;
+  color: var(--dark);
+}
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.7s ease, transform 0.7s ease;
+}
+.reveal.visible { opacity: 1; transform: translateY(0); }
+
+/* ── ABOUT ─────────────────────────────────────────────────────── */
+.about { background: var(--cream); }
+.about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 5rem;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.about-text p {
+  font-size: 1.05rem;
+  line-height: 1.8;
+  color: #3a3a2e;
+  margin-bottom: 1.2rem;
+}
+.about-text strong { color: var(--mid); }
+.pull-quote {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.5rem;
+  font-style: italic;
+  color: var(--mid);
+  border-left: 3px solid var(--bright);
+  padding-left: 1.5rem;
+  margin: 2rem 0;
+  line-height: 1.5;
+}
+.about-visual {
+  display: flex; align-items: center; justify-content: center;
+}
+.mandio-card {
+  background: var(--forest);
+  border-radius: 24px;
+  padding: 2.5rem;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.mandio-card::before {
+  content: '';
+  position: absolute;
+  top: -30px; right: -30px;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: rgba(76,175,80,0.15);
+}
+.mandio-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  display: block;
+}
+.mandio-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+.mandio-card p {
+  font-size: 0.85rem;
+  color: rgba(232,245,233,0.6);
+  line-height: 1.6;
+}
+.mandio-facts {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.fact {
+  background: rgba(76,175,80,0.12);
+  border: 1px solid rgba(76,175,80,0.2);
+  border-radius: 12px;
+  padding: 1rem;
+  text-align: left;
+}
+.fact-val {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--bright);
+  display: block;
+}
+.fact-label {
+  font-size: 0.72rem;
+  color: rgba(232,245,233,0.5);
+  letter-spacing: 0.05em;
+}
+
+/* ── SOSTENIBILIDAD ─────────────────────────────────────────── */
+.sosten { background: var(--white); }
+.sosten-inner { max-width: 1100px; margin: 0 auto; }
+.sosten-header { text-align: center; margin-bottom: 4rem; }
+.sosten-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+}
+.sosten-card {
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+.sosten-card:hover { transform: translateY(-6px); }
+.sosten-card.amb { background: #e8f5e9; }
+.sosten-card.eco { background: #e3f2fd; }
+.sosten-card.inc { background: #fff3e0; }
+.sosten-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 4px;
+  border-radius: 20px 20px 0 0;
+}
+.sosten-card.amb::after { background: #4caf50; }
+.sosten-card.eco::after { background: #2196f3; }
+.sosten-card.inc::after { background: #ff9800; }
+.card-icon {
+  font-size: 2.5rem;
+  margin-bottom: 1.2rem;
+  display: block;
+}
+.sosten-card h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+}
+.sosten-card.amb h3 { color: #1b5e20; }
+.sosten-card.eco h3 { color: #0d47a1; }
+.sosten-card.inc h3 { color: #bf360c; }
+.sosten-card p {
+  font-size: 0.9rem;
+  line-height: 1.7;
+  color: #555;
+}
+.sosten-card ul {
+  list-style: none;
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.sosten-card ul li {
+  font-size: 0.85rem;
+  color: #555;
+  padding-left: 1.2rem;
+  position: relative;
+}
+.sosten-card ul li::before {
+  content: '→';
+  position: absolute;
+  left: 0;
+  font-size: 0.75rem;
+}
+.sosten-card.amb ul li::before { color: #4caf50; }
+.sosten-card.eco ul li::before { color: #2196f3; }
+.sosten-card.inc ul li::before { color: #ff9800; }
+
+/* ── PROCESO ─────────────────────────────────────────────────── */
+.proceso { background: var(--forest); }
+.proceso .section-title { color: var(--white); }
+.proceso .section-tag { color: var(--bright); }
+.proceso-inner { max-width: 900px; margin: 3rem auto 0; }
+.step {
+  display: grid;
+  grid-template-columns: 60px 1fr;
+  gap: 2rem;
+  margin-bottom: 3rem;
+  align-items: start;
+}
+.step:last-child { margin-bottom: 0; }
+.step-num {
+  width: 60px; height: 60px;
+  border: 1.5px solid rgba(76,175,80,0.4);
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--bright);
+  flex-shrink: 0;
+  position: relative;
+}
+.step-num::after {
+  content: '';
+  position: absolute;
+  top: 62px; left: 50%;
+  transform: translateX(-50%);
+  width: 1px;
+  height: calc(100% + 50px);
+  background: linear-gradient(to bottom, rgba(76,175,80,0.3), transparent);
+}
+.step:last-child .step-num::after { display: none; }
+.step-content { padding-top: 0.8rem; }
+.step-phase {
+  font-size: 0.7rem;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--bright);
+  margin-bottom: 0.4rem;
+}
+.step h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  color: var(--white);
+  margin-bottom: 0.5rem;
+}
+.step p {
+  font-size: 0.9rem;
+  color: rgba(232,245,233,0.6);
+  line-height: 1.7;
+}
+
+/* ── IMPACTO / PERSUASIVE ────────────────────────────────────── */
+.impacto { background: var(--dark); text-align: center; }
+.impacto-inner { max-width: 720px; margin: 0 auto; }
+.impacto .section-tag { justify-content: center; }
+.impacto .section-tag::before { display: none; }
+.impacto .section-title { color: var(--white); }
+.impacto-text {
+  font-size: 1.15rem;
+  line-height: 1.8;
+  color: rgba(232,245,233,0.7);
+  margin: 1.5rem 0 2.5rem;
+}
+.impacto-text strong { color: var(--bright); font-weight: 500; }
+
+/* ── LOCAL ────────────────────────────────────────────────────── */
+.local { background: var(--cream); }
+.local-inner {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+.local-details { margin-top: 2rem; }
+.detail-row {
+  display: flex;
+  gap: 1rem;
+  padding: 1rem 0;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+  align-items: start;
+}
+.detail-row:last-child { border-bottom: none; }
+.detail-key {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mid);
+  font-weight: 500;
+  min-width: 100px;
+  padding-top: 0.1rem;
+}
+.detail-val {
+  font-size: 0.92rem;
+  color: var(--text);
+  line-height: 1.6;
+  flex: 1;
+}
+.map-placeholder {
+  background: var(--forest);
+  border-radius: 20px;
+  padding: 3rem;
+  text-align: center;
+  min-height: 340px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+.map-placeholder::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(76,175,80,0.03) 0px,
+    rgba(76,175,80,0.03) 1px,
+    transparent 1px,
+    transparent 20px
+  );
+}
+.map-icon { font-size: 3rem; }
+.map-placeholder h3 {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  color: var(--white);
+}
+.map-placeholder p {
+  font-size: 0.85rem;
+  color: rgba(232,245,233,0.5);
+  max-width: 220px;
+  line-height: 1.6;
+}
+.map-badge {
+  background: rgba(76,175,80,0.2);
+  border: 1px solid rgba(76,175,80,0.4);
+  color: var(--bright);
+  font-size: 0.75rem;
+  padding: 0.4rem 1rem;
+  border-radius: 99px;
+}
+
+/* ── PLATAFORMAS ─────────────────────────────────────────────── */
+.plataformas { background: var(--white); }
+.plataformas-inner { max-width: 1100px; margin: 0 auto; }
+.plataformas-header { margin-bottom: 3rem; }
+.plat-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+.plat-card {
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 16px;
+  padding: 1.5rem;
+  transition: border-color 0.2s, transform 0.2s, box-shadow 0.2s;
+}
+.plat-card:hover {
+  border-color: var(--bright);
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(76,175,80,0.1);
+}
+.plat-icon { font-size: 1.8rem; margin-bottom: 0.8rem; display: block; }
+.plat-card h4 {
+  font-weight: 500;
+  font-size: 0.95rem;
+  margin-bottom: 0.3rem;
+  color: var(--dark);
+}
+.plat-card p {
+  font-size: 0.8rem;
+  color: #888;
+  line-height: 1.5;
+}
+.plat-badge {
+  display: inline-block;
+  margin-top: 0.8rem;
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--mid);
+  background: var(--pale);
+  padding: 0.2rem 0.7rem;
+  border-radius: 99px;
+}
+
+/* ── QR SECTION ─────────────────────────────────────────────── */
+.qr-section {
+  background: var(--forest);
+  text-align: center;
+  padding: 5rem 3rem;
+}
+.qr-inner { max-width: 600px; margin: 0 auto; }
+.qr-section .section-title { color: var(--white); margin-bottom: 1rem; }
+.qr-section p {
+  color: rgba(232,245,233,0.6);
+  font-size: 0.95rem;
+  margin-bottom: 2.5rem;
+  line-height: 1.7;
+}
+.qr-box-wrapper {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+.qr-visual {
+  width: 160px; height: 160px;
+  background: var(--white);
+  border-radius: 16px;
+  display: flex; align-items: center; justify-content: center;
+  padding: 1rem;
+  box-shadow: 0 0 0 4px rgba(76,175,80,0.3);
+}
+.qr-note {
+  font-size: 0.78rem;
+  color: rgba(232,245,233,0.4);
+  letter-spacing: 0.05em;
+}
+
+/* ── FOOTER ─────────────────────────────────────────────────── */
+footer {
+  background: var(--dark);
+  padding: 3rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  border-top: 1px solid rgba(76,175,80,0.15);
+}
+.footer-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: var(--bright);
+}
+.footer-tagline {
+  font-size: 0.8rem;
+  color: rgba(232,245,233,0.3);
+  margin-top: 0.2rem;
+}
+.footer-links {
+  display: flex; gap: 2rem; list-style: none;
+}
+.footer-links a {
+  color: rgba(232,245,233,0.4);
+  text-decoration: none;
+  font-size: 0.8rem;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--bright); }
+.footer-copy {
+  font-size: 0.75rem;
+  color: rgba(232,245,233,0.2);
+}
+
+/* ── ANIMATIONS ─────────────────────────────────────────────── */
+@keyframes fadeUp {
+  from { opacity:0; transform:translateY(24px); }
+  to   { opacity:1; transform:translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity:0; }
+  to   { opacity:1; }
+}
+
+/* ── RESPONSIVE ─────────────────────────────────────────────── */
+@media (max-width: 900px) {
+  nav { padding: 1rem 1.5rem; }
+  nav.scrolled { padding: 0.7rem 1.5rem; }
+  .nav-links { display: none; }
+  .hero { grid-template-columns: 1fr; padding: 7rem 1.5rem 4rem; text-align: center; }
+  .hero-visual { display: none; }
+  .hero-actions { justify-content: center; }
+  .hero-eyebrow { justify-content: center; }
+  section { padding: 4rem 1.5rem; }
+  .about-grid, .local-inner { grid-template-columns: 1fr; gap: 2.5rem; }
+  .sosten-cards { grid-template-columns: 1fr; }
+  .plat-grid { grid-template-columns: 1fr 1fr; }
+  .stats-strip { gap: 2rem; padding: 2rem 1.5rem; }
+  footer { flex-direction: column; text-align: center; }
+  .footer-links { justify-content: center; }
+  .cursor, .cursor-ring { display: none; }
+  body { cursor: auto; }
+}
+@media (max-width: 560px) {
+  .plat-grid { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- Cursor -->
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
+
+<!-- NAV -->
+<nav id="nav">
+  <a href="#" class="nav-logo">Kampara</a>
+  <ul class="nav-links">
+    <li><a href="#historia">Historia</a></li>
+    <li><a href="#sostenibilidad">Sostenibilidad</a></li>
+    <li><a href="#proceso">Plan</a></li>
+    <li><a href="#local">Lanzamiento</a></li>
+    <li><a href="#qr" class="nav-cta">Escanear QR</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <!-- Particles -->
+  <div class="particle" style="width:4px;height:4px;left:60%;bottom:10%;animation-duration:6s;animation-delay:0s"></div>
+  <div class="particle" style="width:3px;height:3px;left:70%;bottom:20%;animation-duration:8s;animation-delay:1s"></div>
+  <div class="particle" style="width:5px;height:5px;left:55%;bottom:5%;animation-duration:7s;animation-delay:2s"></div>
+  <div class="particle" style="width:3px;height:3px;left:75%;bottom:15%;animation-duration:9s;animation-delay:0.5s"></div>
+  <div class="particle" style="width:4px;height:4px;left:65%;bottom:30%;animation-duration:5s;animation-delay:3s"></div>
+
+  <div class="hero-text">
+    <p class="hero-eyebrow">Paraguay · Asunción · 2025</p>
+    <h1 class="hero-title">
+      Tu bolsa renace
+      <em>de la tierra</em>
+    </h1>
+    <p class="hero-subtitle">
+      Kampara es la primera bolsa biodegradable hecha con almidón de mandioca paraguaya. 
+      Se disuelve en agua en minutos. Desaparece de la tierra en 180 días. 
+      Y da trabajo a las familias del campo.
+    </p>
+    <div class="hero-actions">
+      <a href="#historia" class="btn-primary">Conocer la historia →</a>
+      <a href="#qr" class="btn-ghost">Escanear QR</a>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="bag-wrapper">
+      <div class="bag-glow"></div>
+      <svg viewBox="0 0 280 320" width="280" height="320" fill="none">
+        <!-- Bag body -->
+        <rect x="30" y="90" width="220" height="210" rx="24"
+          fill="rgba(76,175,80,0.15)" stroke="rgba(76,175,80,0.5)" stroke-width="2"/>
+        <!-- Handle left -->
+        <path d="M90 90 C90 90 82 44 82 36 C82 24 90 18 100 22" 
+          stroke="rgba(76,175,80,0.6)" stroke-width="3" stroke-linecap="round"/>
+        <!-- Handle right -->
+        <path d="M190 90 C190 90 198 44 198 36 C198 24 190 18 180 22"
+          stroke="rgba(76,175,80,0.6)" stroke-width="3" stroke-linecap="round"/>
+        <!-- Leaf decoration -->
+        <path d="M140 180 C140 180 104 160 104 136 C104 136 116 128 140 130 C164 128 176 136 176 136 C176 160 140 180 140 180Z"
+          fill="rgba(76,175,80,0.4)" stroke="rgba(76,175,80,0.7)" stroke-width="1.5"/>
+        <path d="M140 180 V130" stroke="rgba(232,245,233,0.5)" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M140 152 C128 144 116 144 110 148" stroke="rgba(232,245,233,0.4)" stroke-width="1" stroke-linecap="round"/>
+        <path d="M140 160 C152 152 164 152 170 156" stroke="rgba(232,245,233,0.4)" stroke-width="1" stroke-linecap="round"/>
+        <!-- Text -->
+        <text x="140" y="228" text-anchor="middle" fill="rgba(129,199,132,0.8)" font-family="DM Sans, sans-serif" font-size="9" letter-spacing="3">100% BIODEGRADABLE</text>
+        <text x="140" y="246" text-anchor="middle" fill="rgba(165,214,167,0.5)" font-family="DM Sans, sans-serif" font-size="8">Se disuelve en 180 días</text>
+        <!-- Kampara label -->
+        <text x="140" y="280" text-anchor="middle" fill="rgba(76,175,80,0.6)" font-family="Georgia, serif" font-size="14" font-style="italic">Kampara</text>
+      </svg>
+    </div>
+  </div>
+
+  <div class="hero-scroll">
+    <div class="scroll-line"></div>
+    <span>scroll</span>
+  </div>
+</section>
+
+<!-- STATS -->
+<div class="stats-strip" id="stats">
+  <div class="stat">
+    <div class="stat-number">400</div>
+    <div class="stat-label">Años que tarda el plástico</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">180</div>
+    <div class="stat-label">Días que tarda Kampara</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">15K</div>
+    <div class="stat-label">Personas/día en Mercado 4</div>
+  </div>
+  <div class="stat">
+    <div class="stat-number">100%</div>
+    <div class="stat-label">Cadena de valor local</div>
+  </div>
+</div>
+
+<!-- HISTORIA -->
+<section class="about" id="historia">
+  <div class="about-grid">
+    <div class="about-text reveal">
+      <p class="section-tag">01 · Historia</p>
+      <h2 class="section-title">De la raíz del Paraguay</h2>
+      <p>
+        Paraguay genera <strong>400.000 toneladas de residuos sólidos por año</strong>. 
+        En los mercados de Asunción — especialmente el Mercado 4 — se distribuyen miles de 
+        bolsas plásticas convencionales cada día. Esas bolsas tardan 400 años en degradarse 
+        y envenenan el Río Paraguay.
+      </p>
+      <p>
+        Kampara nació de una pregunta simple: ¿y si la solución ya estaba en nuestra tierra? 
+        La <strong>mandioca (Manihot esculenta)</strong> es el cuarto cultivo más importante 
+        del país. Su almidón, procesado, produce bolsas que se disuelven en agua en minutos 
+        y en la tierra en 180 días. Sin dejar rastro. Sin microplásticos.
+      </p>
+      <blockquote class="pull-quote">
+        "El cambio empieza con lo que llevás en la mano."
+      </blockquote>
+      <p>
+        Al elegir Kampara, apoyás a familias productoras del campo paraguayo, protegés 
+        nuestros ríos y demostrás que el diseño sustentable puede nacer desde adentro.
+      </p>
+    </div>
+    <div class="about-visual reveal">
+      <div class="mandio-card">
+        <span class="mandio-icon">🌿</span>
+        <h3>Manihot esculenta</h3>
+        <p>La mandioca paraguaya como materia prima de un futuro sin plástico</p>
+        <div class="mandio-facts">
+          <div class="fact">
+            <span class="fact-val">4.°</span>
+            <span class="fact-label">Cultivo más importante del país</span>
+          </div>
+          <div class="fact">
+            <span class="fact-val">180d</span>
+            <span class="fact-label">Biodegradación completa</span>
+          </div>
+          <div class="fact">
+            <span class="fact-val">0</span>
+            <span class="fact-label">Microplásticos generados</span>
+          </div>
+          <div class="fact">
+            <span class="fact-val">100%</span>
+            <span class="fact-label">Origen paraguayo</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOSTENIBILIDAD -->
+<section class="sosten" id="sostenibilidad">
+  <div class="sosten-inner">
+    <div class="sosten-header reveal">
+      <p class="section-tag">02 · Sostenibilidad</p>
+      <h2 class="section-title">Diseño sustentable en<br>tres dimensiones</h2>
+    </div>
+    <div class="sosten-cards">
+      <div class="sosten-card amb reveal">
+        <span class="card-icon">🌱</span>
+        <h3>Ambiental</h3>
+        <p>Material 100% biodegradable y compostable que no deja residuos permanentes en el entorno.</p>
+        <ul>
+          <li>Sin microplásticos</li>
+          <li>Materia prima renovable</li>
+          <li>Se disuelve en agua</li>
+          <li>Reduce contaminación fluvial</li>
+        </ul>
+      </div>
+      <div class="sosten-card eco reveal">
+        <span class="card-icon">💚</span>
+        <h3>Económica</h3>
+        <p>Cadena de valor 100% local que genera empleo rural y reduce la dependencia de importaciones.</p>
+        <ul>
+          <li>Empleo en zonas rurales</li>
+          <li>Precio competitivo</li>
+          <li>Reduce importación de polietileno</li>
+          <li>Mercado local fortalecido</li>
+        </ul>
+      </div>
+      <div class="sosten-card inc reveal">
+        <span class="card-icon">🤝</span>
+        <h3>Inclusiva</h3>
+        <p>Comunidades campesinas e indígenas participan como productoras directas y protagonistas.</p>
+        <ul>
+          <li>Productoras del campo</li>
+          <li>Accesible para todo público</li>
+          <li>Nombre en guaraní</li>
+          <li>Bilingüe español-guaraní</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PLAN / PROCESO -->
+<section class="proceso" id="proceso">
+  <div style="max-width:900px;margin:0 auto;">
+    <p class="section-tag reveal">03 · Plan de acción</p>
+    <h2 class="section-title reveal">8 semanas para cambiar<br>los mercados de Asunción</h2>
+    <div class="proceso-inner">
+      <div class="step reveal">
+        <div class="step-num">1</div>
+        <div class="step-content">
+          <p class="step-phase">Semanas 1–2 · Investigación</p>
+          <h3>Diagnóstico y alianzas</h3>
+          <p>Relevamiento del problema en Asunción. Contacto con productores de mandioca del Dpto. Central y Cordillera. Visita al SENAVE y MAG para viabilidad técnica. Definición de identidad Kampara.</p>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">2</div>
+        <div class="step-content">
+          <p class="step-phase">Semanas 3–4 · Diseño</p>
+          <h3>Desarrollo del material gráfico</h3>
+          <p>Diseño del packaging de la bolsa. MUPI digital en formatos 9:16 y 4:5. Fotografías y video de 10 segundos con agricultoras y el producto real en campo.</p>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">3</div>
+        <div class="step-content">
+          <p class="step-phase">Semana 5 · Pre-lanzamiento</p>
+          <h3>Campaña teaser digital</h3>
+          <p>3 reels en Instagram con cuenta regresiva. #KamparaChallenge en TikTok. Activación en grupos de WhatsApp de feriantes. MUPI físico instalado en Av. Mcal. López y España.</p>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">4</div>
+        <div class="step-content">
+          <p class="step-phase">Semana 6 · Evento</p>
+          <h3>Lanzamiento en Mercado 4</h3>
+          <p>Stand de 3×3 m con pallets reciclados, pantalla LED y demostración en vivo de la bolsa disolviéndose. 200 bolsas gratuitas. Cobertura de ABC Color y Última Hora.</p>
+        </div>
+      </div>
+      <div class="step reveal">
+        <div class="step-num">5</div>
+        <div class="step-content">
+          <p class="step-phase">Semanas 7–8 · Distribución</p>
+          <h3>Métricas y seguimiento</h3>
+          <p>Distribución en supermercados Stock y Superseis. Meta: 10.000 bolsas en el primer mes. Encuesta de percepción de marca y análisis de escaneos QR.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- IMPACTO -->
+<section class="impacto" id="impacto">
+  <div class="impacto-inner reveal">
+    <p class="section-tag">04 · Por qué importa</p>
+    <h2 class="section-title">Una bolsa que no destruye<br>lo que carga</h2>
+    <p class="impacto-text">
+      Cada año, Paraguay descarta millones de bolsas plásticas que tardan <strong>400 años</strong> en 
+      degradarse, envenenando nuestros ríos y suelos. <strong>Kampara</strong> nació de nuestra tierra: 
+      almidón de mandioca que se disuelve en agua en minutos y en la tierra en 180 días. 
+      Al elegir Kampara, apoyás a familias productoras del campo paraguayo y protegés los ríos 
+      que nos dan vida.
+    </p>
+    <a href="#qr" class="btn-primary">Ver puntos de venta →</a>
+  </div>
+</section>
+
+<!-- LOCAL DE LANZAMIENTO -->
+<section class="local" id="local">
+  <div class="local-inner">
+    <div class="reveal">
+      <p class="section-tag">05 · Lanzamiento</p>
+      <h2 class="section-title">Mercado 4 — Pettirossi</h2>
+      <p style="color:#666;line-height:1.7;margin-bottom:1.5rem;font-size:0.95rem;">
+        El mercado más concurrido de Asunción es el escenario perfecto: 
+        donde el problema es más visible, ahí nace la solución.
+      </p>
+      <div class="local-details">
+        <div class="detail-row">
+          <span class="detail-key">Dirección</span>
+          <span class="detail-val">Av. Pettirossi esq. Río de Janeiro, Asunción</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-key">Afluencia</span>
+          <span class="detail-val">≈ 15.000 personas por día</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-key">Formato</span>
+          <span class="detail-val">Stand 3×3 m · Pallets reciclados · Pantalla LED · Demo en vivo</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-key">Fecha</span>
+          <span class="detail-val">Sábado de mañana · 7:00 a 12:00 hs</span>
+        </div>
+        <div class="detail-row">
+          <span class="detail-key">Promo</span>
+          <span class="detail-val">200 bolsas gratuitas para los primeros visitantes</span>
+        </div>
+      </div>
+    </div>
+    <div class="map-placeholder reveal">
+      <span class="map-icon">📍</span>
+      <h3>Mercado 4</h3>
+      <p>Av. Pettirossi esq. Río de Janeiro<br>Asunción, Paraguay</p>
+      <span class="map-badge">Stand Kampara · Sábados</span>
+    </div>
+  </div>
+</section>
+
+<!-- PLATAFORMAS -->
+<section class="plataformas" id="plataformas">
+  <div class="plataformas-inner">
+    <div class="plataformas-header reveal">
+      <p class="section-tag">06 · Plataformas</p>
+      <h2 class="section-title">Donde vas a encontrarnos</h2>
+    </div>
+    <div class="plat-grid">
+      <div class="plat-card reveal">
+        <span class="plat-icon">📱</span>
+        <h4>Instagram Reels</h4>
+        <p>Videos 9:16 de 10 segundos. Alcance joven 18–35.</p>
+        <span class="plat-badge">Principal</span>
+      </div>
+      <div class="plat-card reveal">
+        <span class="plat-icon">🎵</span>
+        <h4>TikTok</h4>
+        <p>#KamparaChallenge. Tendencia viral, Gen Z.</p>
+        <span class="plat-badge">Principal</span>
+      </div>
+      <div class="plat-card reveal">
+        <span class="plat-icon">👥</span>
+        <h4>Facebook Paraguay</h4>
+        <p>MUPI estático + evento. Adultos 30–55.</p>
+        <span class="plat-badge">Apoyo</span>
+      </div>
+      <div class="plat-card reveal">
+        <span class="plat-icon">💬</span>
+        <h4>WhatsApp grupos</h4>
+        <p>Imagen + link QR. Feriantes y vecinos.</p>
+        <span class="plat-badge">Apoyo</span>
+      </div>
+      <div class="plat-card reveal">
+        <span class="plat-icon">🖥️</span>
+        <h4>Pantallas MUPI calle</h4>
+        <p>Formato físico digital. Av. Mcal. López y España.</p>
+        <span class="plat-badge">Físico</span>
+      </div>
+      <div class="plat-card reveal">
+        <span class="plat-icon">🏪</span>
+        <h4>Stand Mercado 4</h4>
+        <p>Experiencia presencial. Demo en vivo del producto.</p>
+        <span class="plat-badge">Físico</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- QR -->
+<section class="qr-section" id="qr">
+  <div class="qr-inner reveal">
+    <p class="section-tag" style="justify-content:center;"><span style="width:20px;height:1px;background:var(--bright);display:inline-block;"></span> &nbsp;07 · Código QR</p>
+    <h2 class="section-title">Escaneá y sumate</h2>
+    <p>Encontrá los puntos de venta, conocé el impacto real de tu compra y conectá directamente con las familias productoras de mandioca paraguaya.</p>
+    <div class="qr-box-wrapper">
+      <div class="qr-visual">
+        <!-- QR placeholder SVG -->
+        <svg viewBox="0 0 120 120" width="128" height="128" fill="none">
+          <rect x="4" y="4" width="34" height="34" rx="4" fill="#1a2e1a"/>
+          <rect x="8" y="8" width="26" height="26" rx="2" fill="white"/>
+          <rect x="12" y="12" width="18" height="18" rx="1" fill="#4caf50"/>
+          <rect x="82" y="4" width="34" height="34" rx="4" fill="#1a2e1a"/>
+          <rect x="86" y="8" width="26" height="26" rx="2" fill="white"/>
+          <rect x="90" y="12" width="18" height="18" rx="1" fill="#4caf50"/>
+          <rect x="4" y="82" width="34" height="34" rx="4" fill="#1a2e1a"/>
+          <rect x="8" y="86" width="26" height="26" rx="2" fill="white"/>
+          <rect x="12" y="90" width="18" height="18" rx="1" fill="#4caf50"/>
+          <rect x="44" y="4" width="6" height="6" fill="#1a2e1a"/>
+          <rect x="54" y="4" width="6" height="6" fill="#1a2e1a"/>
+          <rect x="64" y="4" width="6" height="6" fill="#1a2e1a"/>
+          <rect x="44" y="14" width="6" height="6" fill="#4caf50"/>
+          <rect x="54" y="14" width="6" height="6" fill="#1a2e1a"/>
+          <rect x="64" y="14" width="6" height="6" fill="#4caf50"/>
+          <rect x="44" y="24" width="6" height="6" fill="#1a2e1a"/>
+          <rect x="54" y="24" width="16" height="6" fill="#4caf50"/>
+          <rect x="44" y="44" width="16" height="6" fill="#1a2e1a"/>
+          <rect x="64" y="44" width="6" height="6" fill="#4caf50"/>
+          <rect x="44" y="54" width="6" height="6" fill="#1a2e1a"/>
+          <rect x="54" y="54" width="6" height="16" fill="#4caf50"/>
+          <rect x="64" y="54" width="6" height="6" fill="#1a2e1a"/>
+          <rect x="44" y="64" width="26" height="6" fill="#1a2e1a"/>
+          <rect x="44" y="74" width="6" height="6" fill="#4caf50"/>
+          <rect x="54" y="74" width="6" height="6" fill="#1a2e1a"/>
+          <rect x="64" y="74" width="6" height="16" fill="#4caf50"/>
+          <rect x="74" y="44" width="6" height="6" fill="#1a2e1a"/>
+          <rect x="84" y="44" width="6" height="6" fill="#4caf50"/>
+          <rect x="94" y="44" width="6" height="6" fill="#1a2e1a"/>
+          <rect x="104" y="44" width="12" height="6" fill="#4caf50"/>
+          <rect x="74" y="54" width="16" height="6" fill="#4caf50"/>
+          <rect x="94" y="54" width="6" height="6" fill="#1a2e1a"/>
+          <rect x="104" y="54" width="12" height="6" fill="#1a2e1a"/>
+          <rect x="74" y="64" width="6" height="6" fill="#1a2e1a"/>
+          <rect x="84" y="64" width="32" height="6" fill="#4caf50"/>
+          <rect x="74" y="74" width="6" height="6" fill="#4caf50"/>
+          <rect x="84" y="74" width="6" height="6" fill="#1a2e1a"/>
+          <rect x="94" y="74" width="6" height="6" fill="#4caf50"/>
+          <rect x="74" y="84" width="6" height="32" fill="#1a2e1a"/>
+          <rect x="84" y="84" width="6" height="6" fill="#4caf50"/>
+          <rect x="94" y="84" width="6" height="6" fill="#1a2e1a"/>
+          <rect x="104" y="84" width="12" height="6" fill="#4caf50"/>
+          <rect x="84" y="94" width="16" height="6" fill="#1a2e1a"/>
+          <rect x="84" y="104" width="6" height="12" fill="#4caf50"/>
+          <rect x="94" y="104" width="22" height="12" fill="#1a2e1a"/>
+          <text x="60" y="118" text-anchor="middle" fill="#4caf50" font-size="7" font-family="DM Sans, sans-serif">kampara.py</text>
+        </svg>
+      </div>
+      <p class="qr-note">Reemplazá este QR con tu código real antes de publicar</p>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div>
+    <div class="footer-logo">Kampara</div>
+    <div class="footer-tagline">Tu bolsa renace de la tierra · Asunción, Paraguay</div>
+  </div>
+  <ul class="footer-links">
+    <li><a href="#historia">Historia</a></li>
+    <li><a href="#sostenibilidad">Sostenibilidad</a></li>
+    <li><a href="#proceso">Plan</a></li>
+    <li><a href="#local">Lanzamiento</a></li>
+  </ul>
+  <div class="footer-copy">© 2025 Kampara · Diseño Gráfico Sustentable</div>
+</footer>
+
+<script>
+// ── Cursor
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx=0,my=0,rx=0,ry=0;
+document.addEventListener('mousemove', e => { mx=e.clientX; my=e.clientY; });
+function animCursor(){
+  cursor.style.left = mx+'px'; cursor.style.top = my+'px';
+  rx += (mx-rx)*0.12; ry += (my-ry)*0.12;
+  ring.style.left = rx+'px'; ring.style.top = ry+'px';
+  requestAnimationFrame(animCursor);
+}
+animCursor();
+
+// ── Nav scroll
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => {
+  nav.classList.toggle('scrolled', window.scrollY > 60);
+});
+
+// ── Intersection Observer for reveals
+const observer = new IntersectionObserver(entries => {
+  entries.forEach((e, i) => {
+    if(e.isIntersecting){
+      e.target.style.transitionDelay = (i * 0.08) + 's';
+      e.target.classList.add('visible');
+    }
+  });
+}, { threshold: 0.12 });
+
+document.querySelectorAll('.reveal, .stat').forEach(el => observer.observe(el));
+
+// ── Stats counter animation
+const stats = document.querySelectorAll('.stat-number');
+const statsObs = new IntersectionObserver(entries => {
+  entries.forEach(entry => {
+    if(entry.isIntersecting){
+      const el = entry.target;
+      const raw = el.textContent.trim();
+      const suffix = raw.replace(/[0-9.]/g,'');
+      const target = parseFloat(raw.replace(/[^0-9.]/g,''));
+      let start = 0;
+      const dur = 1200;
+      const startTime = performance.now();
+      function tick(now){
+        const t = Math.min((now-startTime)/dur,1);
+        const ease = 1-Math.pow(1-t,3);
+        const val = Math.round(ease*target);
+        el.textContent = val + suffix;
+        if(t<1) requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      statsObs.unobserve(el);
+    }
+  });
+}, {threshold:0.5});
+stats.forEach(s => statsObs.observe(s));
+</script>
+</body>
+</html>
